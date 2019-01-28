@@ -94,9 +94,10 @@ func (m *aMessage) ContentID() (string, bool) {
 	return maybeGoString(cid)
 }
 
-func (m *aMessage) SetContentID() (string, bool) {
-	cid := C.g_mime_object_set_content_id(m.rawMessage())
-	return maybeGoString(cid)
+func (m *aMessage) SetContentID(contentId string) {
+	var cMessageId *C.char = C.CString(contentId)
+	C.g_mime_message_set_content_id(m.rawMessage(), cMessageId)
+	C.free(unsafe.Pointer(cMessageId))
 }
 
 func (m *aMessage) SetMessageId(messageId string) {
