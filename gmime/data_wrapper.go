@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-3.0
+#cgo pkg-config: gmime-2.6
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */

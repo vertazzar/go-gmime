@@ -23,7 +23,6 @@ type Message interface {
 	SetMimePart(Object)
 	MimePart() Object
 	Body() Object
-	Date() string
 }
 
 type aMessage struct {
