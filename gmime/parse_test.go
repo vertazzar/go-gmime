@@ -23,9 +23,7 @@ func ExampleNewParse() {
 	reader := bufio.NewReader(fileHandler)
 	parse := NewParse(reader)
 
-	from, _ := parse.From()
 	subject, _ := parse.Subject()
-	fmt.Println(from)
 	fmt.Println(parse.To())
 	fmt.Println(subject)
 

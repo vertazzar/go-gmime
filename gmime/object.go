@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 static gboolean object_is_part(GTypeInstance *obj) {
@@ -39,7 +39,6 @@ type Object interface {
 	ToString() string
 	ContentDisposition() ContentDisposition
 	Headers() string
-	WriteToStream(Stream) int
 	WalkHeaders(cb func(string, string) error) error
 }
 
@@ -58,7 +57,7 @@ func CastObject(o *C.GMimeObject) *anObject {
 
 func NewObject(contentType ContentType) Object {
 	rawContentType := contentType.(rawContentType)
-	object := C.g_mime_object_new(rawContentType.rawContentType())
+	object := C.g_mime_object_new(nil, rawContentType.rawContentType())
 	defer unref(C.gpointer(object))
 	o := objectAsSubclass(object)
 	return o
@@ -70,7 +69,7 @@ func NewObjectWithType(ctype string, csubtype string) Object {
 	defer C.free(unsafe.Pointer(_ctype))
 	defer C.free(unsafe.Pointer(_csubtype))
 
-	object := C.g_mime_object_new_type(_ctype, _csubtype)
+	object := C.g_mime_object_new_type(nil, _ctype, _csubtype)
 	defer unref(C.gpointer(object))
 	o := objectAsSubclass(object)
 	o.SetContentType(NewContentType(ctype, csubtype))
@@ -138,12 +137,6 @@ func (o *anObject) Headers() string {
 	return C.GoString(headers)
 }
 
-func (o *anObject) WriteToStream(stream Stream) int {
-	rawStream := stream.(rawStream)
-	res := C.g_mime_object_write_to_stream(o.rawObject(), rawStream.rawStream())
-
-	return int(res)
-}
 
 func (o *anObject) rawObject() *C.GMimeObject {
 	return (*C.GMimeObject)(o.pointer())
@@ -169,21 +162,23 @@ func objectAsSubclass(o *C.GMimeObject) Object {
 
 func (o *anObject) WalkHeaders(cb func(string, string) error) error {
 	ghl := C.g_mime_object_get_header_list(o.rawObject())
-	iter := C.g_mime_header_iter_new()
-	defer C.g_mime_header_iter_free(iter)
-	if !gobool(C.g_mime_header_list_get_iter(ghl, iter)) {
-		return nil
-	}
+	defer C.free(unsafe.Pointer(ghl))
+	i := 0
 	for {
-		name := C.GoString(C.g_mime_header_iter_get_name(iter))
-		value := C.GoString(C.g_mime_header_iter_get_value(iter))
+		header := C.g_mime_header_list_get_header_at(ghl, C.int(i))
+		if header == nil {
+			return nil
+		}
+		name := C.GoString(C.g_mime_header_get_name(header))
+		value := C.GoString(C.g_mime_header_get_value(header))
+
+		C.free(unsafe.Pointer(header))
+
 		err := cb(name, value)
 		if err != nil {
 			return err
 		}
-		if !gobool(C.g_mime_header_iter_next(iter)) {
-			return nil
-		}
+		i ++
 	}
 }
 

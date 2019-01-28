@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */
@@ -41,13 +41,6 @@ func NewFsStreamWithBounds(fd int, start int64, end int64) FsStream {
 	return castFsStream(fStream)
 }
 
-func NewFsStreamForPath(name string, flags int, mode int) FsStream {
-	cName := C.CString(name)
-	defer C.free(unsafe.Pointer(cName))
-	fStream := C.g_mime_stream_fs_new_for_path(cName, C.int(flags), C.int(mode))
-	defer unref(C.gpointer(fStream))
-	return castFsStream((*C.GMimeStreamFs)(unsafe.Pointer(fStream)))
-}
 
 func (f *aFsStream) rawFsStream() *C.GMimeStreamFs {
 	return (*C.GMimeStreamFs)(f.pointer())

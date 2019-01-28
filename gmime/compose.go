@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */
@@ -109,9 +109,6 @@ func (p *aCompose) HTML() string {
 	return p.Text()
 }
 
-func (p *aCompose) From() (string, bool) {
-	return p.message.Sender()
-}
 
 func (p *aCompose) Recipient() string {
 	recipient := p.message.AllRecipients()

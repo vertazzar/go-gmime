@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 
@@ -288,7 +288,7 @@ func ParseString(str string) AddressList {
 	var cStr *C.char = C.CString(str)
 	defer C.free(unsafe.Pointer(cStr))
 
-	cList := C.internet_address_list_parse_string(cStr)
+	cList := C.internet_address_list_parse(nil, cStr)
 	defer unref(C.gpointer(cList))
 
 	if cList != nil {

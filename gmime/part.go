@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */
@@ -53,11 +53,11 @@ func NewPartWithType(ctype string, csubtype string) Part {
 
 func (p *aPart) SetContentObject(content DataWrapper) {
 	rawContent := content.(rawDataWrapper)
-	C.g_mime_part_set_content_object(p.rawPart(), rawContent.rawDataWrapper())
+	C.g_mime_part_set_content(p.rawPart(), rawContent.rawDataWrapper())
 }
 
 func (p *aPart) ContentObject() DataWrapper {
-	cDataWrapper := C.g_mime_part_get_content_object(p.rawPart())
+	cDataWrapper := C.g_mime_part_get_content(p.rawPart())
 	if cDataWrapper == nil {
 		return nil
 	}

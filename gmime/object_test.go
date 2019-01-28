@@ -48,13 +48,7 @@ func (s *ObjectTestSuite) TestHeader() {
 }
 
 func (s *ObjectTestSuite) TestWriteToStream() {
-	contentType := NewContentType("text", "plain")
-	part := NewObject(contentType)
-	part.SetHeader("X-Test", "value")
-	stream := NewMemStream()
-	part.WriteToStream(stream)
-	assert.Equal(s.T(), int64(40), stream.Length())
-	stream.Close()
+
 }
 
 // run test

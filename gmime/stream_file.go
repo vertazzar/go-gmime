@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */
@@ -47,16 +47,6 @@ func NewFileStreamWithBounds(f *C.FILE, start int64, end int64) FileStream {
 	fileStream := (*C.GMimeStreamFile)(unsafe.Pointer(sBound))
 	defer unref(C.gpointer(fileStream))
 	return CastFileStream(fileStream)
-}
-
-func NewFileStreamForPath(name string, mode string) FileStream {
-	cMode := C.CString(mode)
-	defer C.free(unsafe.Pointer(cMode))
-	cName := C.CString(name)
-	defer C.free(unsafe.Pointer(cName))
-	fileStream := C.g_mime_stream_file_new_for_path(cName, cMode)
-	defer unref(C.gpointer(fileStream))
-	return CastFileStream((*C.GMimeStreamFile)(unsafe.Pointer(fileStream)))
 }
 
 func (f *aFileStream) rawFileStream() *C.GMimeStreamFile {

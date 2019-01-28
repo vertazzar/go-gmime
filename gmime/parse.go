@@ -11,7 +11,6 @@ import (
 type Parse interface {
 	To() string
 	Subject() (string, bool)
-	From() (string, bool)
 	Bcc() string
 	Cc() string
 	Recipients() string
@@ -48,9 +47,6 @@ func (p *aParse) Subject() (string, bool) {
 	return p.message.Subject()
 }
 
-func (p *aParse) From() (string, bool) {
-	return p.message.Sender()
-}
 
 func (p *aParse) Bcc() string {
 	return p.message.Bcc().ToString(true)

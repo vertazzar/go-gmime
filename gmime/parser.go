@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */
@@ -33,7 +33,7 @@ func NewParserWithStream(stream Stream) Parser {
 }
 
 func (p *aParser) ConstructMessage() Message {
-	message := C.g_mime_parser_construct_message(p.rawParser())
+	message := C.g_mime_parser_construct_message(p.rawParser(), nil)
 	if message != nil {
 		defer unref(C.gpointer(message))
 		return CastMessage(message)
@@ -42,7 +42,7 @@ func (p *aParser) ConstructMessage() Message {
 }
 
 func (p *aParser) ConstructPart() Object {
-	object := C.g_mime_parser_construct_part(p.rawParser())
+	object := C.g_mime_parser_construct_part(p.rawParser(), nil)
 	defer unref(C.gpointer(object))
 	return objectAsSubclass(object)
 }
@@ -58,7 +58,7 @@ func (p *aParser) Eos() bool {
 }
 
 func (p *aParser) SetScanFrom(scanFrom bool) {
-	C.g_mime_parser_set_scan_from(p.rawParser(), gbool(scanFrom))
+	C.g_mime_parser_set_format(p.rawParser(), gbool(scanFrom))
 }
 
 func (p *aParser) rawParser() *C.GMimeParser {

@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 static gboolean object_is_content_disposition(GMimeContentDisposition *obj) {
@@ -33,7 +33,7 @@ func NewContentDispositionFromString(str string) *aContentDisposition {
 	cStr := C.CString(str)
 	defer C.free(unsafe.Pointer(cStr))
 
-	cd := C.g_mime_content_disposition_new_from_string(cStr)
+	cd := C.g_mime_content_disposition_parse(nil, cStr)
 	defer unref(C.gpointer(cd))
 
 	return CastContentDisposition(cd)
@@ -58,7 +58,7 @@ func (d *aContentDisposition) IsAttachment() bool {
 }
 
 func (d *aContentDisposition) ToString(fold bool) string {
-	cDisposition := C.g_mime_content_disposition_to_string(d.rawContentDisposition(), gbool(fold))
+	cDisposition := C.g_mime_content_disposition_encode(d.rawContentDisposition(), gbool(fold))
 
 	defer C.free(unsafe.Pointer(cDisposition))
 	return C.GoString(cDisposition)
@@ -80,7 +80,7 @@ func (t *aContentDisposition) Parameter(name string) string {
 }
 
 func (t *aContentDisposition) ForEachParam(callback GMimeParamsCallback) {
-	params := C.g_mime_content_disposition_get_params(t.rawContentDisposition())
+	params := C.g_mime_content_disposition_get_parameters(t.rawContentDisposition())
 	forEachParam(params, callback)
 }
 

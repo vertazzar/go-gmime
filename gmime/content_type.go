@@ -1,7 +1,7 @@
 package gmime
 
 /*
-#cgo pkg-config: gmime-2.6
+#cgo pkg-config: gmime-3.0
 #include <stdlib.h>
 #include <gmime/gmime.h>
 */
@@ -47,14 +47,14 @@ func NewContentTypeFromString(str string) ContentType {
 	var _str *C.char = C.CString(str)
 	defer C.free(unsafe.Pointer(_str))
 
-	ct := C.g_mime_content_type_new_from_string(_str)
+	ct := C.g_mime_content_type_parse(nil, _str)
 	defer unref(C.gpointer(ct))
 
 	return CastContentType(ct)
 }
 
 func (t *aContentType) ToString() string {
-	var contentType *C.char = C.g_mime_content_type_to_string(t.rawContentType())
+	var contentType *C.char = C.g_mime_content_type_get_mime_type(t.rawContentType())
 	defer C.free(unsafe.Pointer(contentType))
 
 	return C.GoString(contentType)
@@ -88,7 +88,7 @@ func (t *aContentType) Parameter(name string) string {
 }
 
 func (t *aContentType) ForEachParam(callback GMimeParamsCallback) {
-	params := C.g_mime_content_type_get_params(t.rawContentType())
+	params := C.g_mime_content_type_get_parameters(t.rawContentType())
 	forEachParam(params, callback)
 }
 

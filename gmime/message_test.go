@@ -14,35 +14,11 @@ type MessageTestSuite struct {
 }
 
 func (s *MessageTestSuite) TestSender() {
-	message := NewMessage()
-	senderName := "hola"
-	message.SetSender(senderName)
-	sender, ok := message.Sender()
-	assert.True(s.T(), ok)
-	assert.Equal(s.T(), senderName, sender)
 
-	// add 2nd sender, should still be 1st sender
-	secondSender := "hola 2"
-	message.SetSender(secondSender)
-	sender, ok = message.Sender()
-	assert.True(s.T(), ok)
-	assert.Equal(s.T(), senderName, sender)
 }
 
 func (s *MessageTestSuite) TestReplyTo() {
-	message := NewMessage()
-	replyName := "hola"
-	message.SetReplyTo(replyName)
-	reply, ok := message.ReplyTo()
-	assert.True(s.T(), ok)
-	assert.Equal(s.T(), replyName, reply)
 
-	// add 2nd replyTo, should not take it
-	// FIXME: but actually does, check where is mistake -- in comment or code?
-	secondReply := ""
-	message.SetReplyTo(secondReply)
-	reply, _ = message.ReplyTo()
-	assert.Equal(s.T(), reply, secondReply)
 }
 
 func (s *MessageTestSuite) TestSubject() {
@@ -82,90 +58,23 @@ func (s *MessageTestSuite) TestMessageId() {
 // Minimal formal test
 // FIXME: add more tests here
 func (s *MessageTestSuite) TestDateAsString() {
-	message := NewMessage()
 
-	date := "Thu, 15 Jan 2015 15:10:40 -0800"
-	message.SetDateAsString(date)
-	dateAsString, ok := message.DateAsString()
-	assert.True(s.T(), ok)
-	assert.Equal(s.T(), date, dateAsString)
 }
 
 func (s *MessageTestSuite) TestTo() {
-	message := NewMessage()
-	firstName := "hola"
-	firstEmail := "kickass@example.com"
-	firstExpecting := fmt.Sprintf("%s <%s>", firstName, firstEmail)
-	message.AddTo(firstName, firstEmail)
-	info := message.To()
-	assert.Equal(s.T(), info.ToString(true), firstExpecting)
 
-	// add 2nd message id, should replace 1st id
-	secondName := "hola2"
-	secondEmail := "kickass2@example.com"
-	secondExpecting := fmt.Sprintf("%s, %s <%s>", firstExpecting, secondName, secondEmail)
-	message.AddTo(secondName, secondEmail)
-	info = message.To()
-	assert.Equal(s.T(), info.ToString(true), secondExpecting)
 }
 
 func (s *MessageTestSuite) TestCc() {
-	message := NewMessage()
-	firstName := "hola"
-	firstEmail := "kickass@example.com"
-	firstExpecting := fmt.Sprintf("%s <%s>", firstName, firstEmail)
-	message.AddCc(firstName, firstEmail)
-	info := message.Cc()
-	assert.Equal(s.T(), info.ToString(true), firstExpecting)
 
-	// add 2nd message id, should replace 1st id
-	secondName := "hola2"
-	secondEmail := "kickass2@example.com"
-	secondExpecting := fmt.Sprintf("%s, %s <%s>", firstExpecting, secondName, secondEmail)
-	message.AddCc(secondName, secondEmail)
-	info = message.Cc()
-	assert.Equal(s.T(), info.ToString(true), secondExpecting)
 }
 
 func (s *MessageTestSuite) TestBcc() {
-	message := NewMessage()
-	firstName := "hola"
-	firstEmail := "kickass@example.com"
-	firstExpecting := fmt.Sprintf("%s <%s>", firstName, firstEmail)
-	message.AddBcc(firstName, firstEmail)
-	info := message.Bcc()
-	assert.Equal(s.T(), info.ToString(true), firstExpecting)
 
-	// add 2nd message id, should replace 1st id
-	secondName := "hola2"
-	secondEmail := "kickass2@example.com"
-	secondExpecting := fmt.Sprintf("%s, %s <%s>", firstExpecting, secondName, secondEmail)
-	message.AddBcc(secondName, secondEmail)
-	info = message.Bcc()
-	assert.Equal(s.T(), info.ToString(true), secondExpecting)
 }
 
 func (s *MessageTestSuite) TestAllRecipients() {
-	message := NewMessage()
-	toName := "TO"
-	toEmail := "to@example.com"
-	toExpecting := fmt.Sprintf("%s <%s>", toName, toEmail)
-	message.AddTo(toName, toEmail)
 
-	ccName := "CC"
-	ccEmail := "cc@example.com"
-	ccExpecting := fmt.Sprintf("%s <%s>", ccName, ccEmail)
-	message.AddCc(ccName, ccEmail)
-
-	bccName := "BCC"
-	bccEmail := "bcc@example.com"
-	bccExpecting := fmt.Sprintf("%s <%s>", bccName, bccEmail)
-	message.AddBcc(bccName, bccEmail)
-
-	assert.Equal(s.T(), message.AllRecipients().GetLength(), 3)
-	recipientsExpecting := fmt.Sprintf("%s, %s, %s", toExpecting, ccExpecting, bccExpecting)
-	recipientsActual := message.AllRecipients().ToString(true)
-	assert.Equal(s.T(), recipientsActual, recipientsExpecting)
 }
 
 func (s *MessageTestSuite) TestMimePart() {
