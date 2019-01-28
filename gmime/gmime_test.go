@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/sendgrid/go-gmime/gmime"
+	"github.com/vertazzar/go-gmime/gmime"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

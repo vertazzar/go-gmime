@@ -5,7 +5,7 @@ package gmime_test
 
 import (
 	"fmt"
-	"github.com/sendgrid/go-gmime/gmime"
+	"github.com/vertazzar/go-gmime/gmime"
 	"runtime/debug"
 )
 

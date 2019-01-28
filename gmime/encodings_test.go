@@ -3,7 +3,7 @@ package gmime_test
 import (
 	"testing"
 
-	"github.com/sendgrid/go-gmime/gmime"
+	"github.com/vertazzar/go-gmime/gmime"
 	"github.com/stretchr/testify/assert"
 )
 
