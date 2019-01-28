@@ -15,6 +15,7 @@ type PartIter interface {
 	Current() Object
 	HasNext() bool
 	Next()
+	GetPath() (string, bool)
 }
 
 // XXX Adapted the API to more closely match the Iterator Design Pattern;
@@ -48,6 +49,10 @@ func (p *aPartIter) Current() Object {
 		}
 		return objectAsSubclass(object)
 	}
+}
+
+func (p *aPartIter) GetPath() (string, bool) {
+	return maybeGoString(C.g_mime_part_iter_get_path(p.partIter))
 }
 
 func (p *aPartIter) HasNext() bool {
