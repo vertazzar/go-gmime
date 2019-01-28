@@ -18,8 +18,6 @@ type Message interface {
 	ReplyTo() (string, bool)
 	SetSubject(string)
 	Subject() (string, bool)
-	ContentID() (string, bool)
-	SetContentID(string)
 	SetMessageId(string)
 	MessageId() (string, bool)
 	DateAsString() (string, bool)
@@ -87,17 +85,6 @@ func (m *aMessage) SetSubject(subject string) {
 func (m *aMessage) Subject() (string, bool) {
 	subject := C.g_mime_message_get_subject(m.rawMessage())
 	return maybeGoString(subject)
-}
-
-func (m *aMessage) ContentID() (string, bool) {
-	cid := C.g_mime_object_get_content_id(m.rawMessage())
-	return maybeGoString(cid)
-}
-
-func (m *aMessage) SetContentID(contentId string) {
-	var cMessageId *C.char = C.CString(contentId)
-	C.g_mime_message_set_content_id(m.rawMessage(), cMessageId)
-	C.free(unsafe.Pointer(cMessageId))
 }
 
 func (m *aMessage) SetMessageId(messageId string) {

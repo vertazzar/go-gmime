@@ -33,6 +33,8 @@ type Object interface {
 	SetContentType(ContentType)
 	ContentType() ContentType
 	SetHeader(string, string)
+	SetContentID(string)
+	ContentID() (string, bool)
 	Header(string) (string, bool)
 	ToString() string
 	ContentDisposition() ContentDisposition
@@ -74,6 +76,17 @@ func NewObjectWithType(ctype string, csubtype string) Object {
 	o.SetContentType(NewContentType(ctype, csubtype))
 
 	return o
+}
+
+func (o *anObject) ContentID() (string, bool) {
+	cid := C.g_mime_object_get_content_id(o.rawObject())
+	return maybeGoString(cid)
+}
+
+func (o *anObject) SetContentID(contentId string) {
+	var cContentId *C.char = C.CString(contentId)
+	defer C.free(unsafe.Pointer(cContentId))
+	C.g_mime_object_set_content_id(o.rawObject(), cContentId)
 }
 
 func (o *anObject) SetContentType(contentType ContentType) {
