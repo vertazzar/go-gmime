@@ -81,6 +81,7 @@ func (t *aContentDisposition) Parameter(name string) string {
 
 func (t *aContentDisposition) ForEachParam(callback GMimeParamsCallback) {
 	params := C.g_mime_content_disposition_get_parameters(t.rawContentDisposition())
+	defer C.free(unsafe.Pointer(params))
 	forEachParam(params, callback)
 }
 

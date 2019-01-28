@@ -89,6 +89,7 @@ func (t *aContentType) Parameter(name string) string {
 
 func (t *aContentType) ForEachParam(callback GMimeParamsCallback) {
 	params := C.g_mime_content_type_get_parameters(t.rawContentType())
+	defer C.free(unsafe.Pointer(params))
 	forEachParam(params, callback)
 }
 
