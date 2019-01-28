@@ -87,6 +87,11 @@ func (m *aMessage) Subject() (string, bool) {
 	return maybeGoString(subject)
 }
 
+func (m *aMessage) ContentID() (string, bool) {
+	cid := C.g_mime_object_get_content_id(m.rawMessage())
+	return maybeGoString(cid)
+}
+
 func (m *aMessage) SetMessageId(messageId string) {
 	var cMessageId *C.char = C.CString(messageId)
 	C.g_mime_message_set_message_id(m.rawMessage(), cMessageId)
