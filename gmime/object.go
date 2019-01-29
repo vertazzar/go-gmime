@@ -30,10 +30,7 @@ import (
 
 type Object interface {
 	Janitor
-	SetContentType(ContentType)
 	ContentType() ContentType
-	SetHeader(string, string)
-	SetContentID(string)
 	ContentID() (string, bool)
 	Header(string) (string, bool)
 	ToString() string
@@ -72,7 +69,6 @@ func NewObjectWithType(ctype string, csubtype string) Object {
 	object := C.g_mime_object_new_type(nil, _ctype, _csubtype)
 	defer unref(C.gpointer(object))
 	o := objectAsSubclass(object)
-	o.SetContentType(NewContentType(ctype, csubtype))
 
 	return o
 }
@@ -82,31 +78,12 @@ func (o *anObject) ContentID() (string, bool) {
 	return maybeGoString(cid)
 }
 
-func (o *anObject) SetContentID(contentId string) {
-	var cContentId *C.char = C.CString(contentId)
-	defer C.free(unsafe.Pointer(cContentId))
-	C.g_mime_object_set_content_id(o.rawObject(), cContentId)
-}
-
-func (o *anObject) SetContentType(contentType ContentType) {
-	rawContentType := contentType.(rawContentType)
-	C.g_mime_object_set_content_type(o.rawObject(), rawContentType.rawContentType())
-}
 
 func (o *anObject) ContentType() ContentType {
 	if ct := C.g_mime_object_get_content_type(o.rawObject()); ct != nil {
 		return CastContentType(ct)
 	}
 	return nil
-}
-
-func (o *anObject) SetHeader(name, value string) {
-	var _name *C.char = C.CString(name)
-	var _value *C.char = C.CString(value)
-	defer C.free(unsafe.Pointer(_name))
-	defer C.free(unsafe.Pointer(_value))
-
-	C.g_mime_object_set_header(o.rawObject(), _name, _value)
 }
 
 func (o *anObject) Header(name string) (string, bool) {

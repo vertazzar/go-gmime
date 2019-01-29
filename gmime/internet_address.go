@@ -254,7 +254,7 @@ func (l *InternetAddressList) SetAddress(address Address, index int) {
 }
 
 func (l *InternetAddressList) ToString(encode bool) string {
-	addresses := C.internet_address_list_to_string(l.rawList(), gbool(encode))
+	addresses := C.internet_address_list_to_string(l.rawList(), nil, gbool(encode))
 	if addresses != nil {
 		addressString := C.GoString(addresses)
 		defer C.free(unsafe.Pointer(addresses))

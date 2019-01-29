@@ -16,7 +16,7 @@ import "C"
 
 // This function call automatically by runtime
 func init() {
-	C.g_mime_init(0)
+	C.g_mime_init()
 }
 
 // This function really need only for valgrind
