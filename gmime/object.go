@@ -139,7 +139,7 @@ func objectAsSubclass(o *C.GMimeObject) Object {
 
 func (o *anObject) WalkHeaders(cb func(string, string) error) error {
 	ghl := C.g_mime_object_get_header_list(o.rawObject())
-	defer C.free(unsafe.Pointer(ghl))
+	//defer C.free(unsafe.Pointer(ghl))
 	i := 0
 	for {
 		header := C.g_mime_header_list_get_header_at(ghl, C.int(i))
@@ -149,7 +149,7 @@ func (o *anObject) WalkHeaders(cb func(string, string) error) error {
 		name := C.GoString(C.g_mime_header_get_name(header))
 		value := C.GoString(C.g_mime_header_get_value(header))
 
-		C.free(unsafe.Pointer(header))
+		//C.free(unsafe.Pointer(header))
 
 		err := cb(name, value)
 		if err != nil {
