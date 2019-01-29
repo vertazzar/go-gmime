@@ -58,7 +58,7 @@ func (d *aContentDisposition) IsAttachment() bool {
 }
 
 func (d *aContentDisposition) ToString(fold bool) string {
-	cDisposition := C.g_mime_content_disposition_encode(d.rawContentDisposition(), gbool(fold))
+	cDisposition := C.g_mime_content_disposition_encode(d.rawContentDisposition(), nil)
 
 	defer C.free(unsafe.Pointer(cDisposition))
 	return C.GoString(cDisposition)

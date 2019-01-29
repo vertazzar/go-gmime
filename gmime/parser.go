@@ -42,13 +42,13 @@ func (p *aParser) ConstructMessage() Message {
 }
 
 func (p *aParser) ConstructPart() Object {
-	object := C.g_mime_parser_construct_part(p.rawParser())
+	object := C.g_mime_parser_construct_part(p.rawParser(), nil)
 	defer unref(C.gpointer(object))
 	return objectAsSubclass(object)
 }
 
 func (p *aParser) Tell() int64 {
-	cint := C.g_mime_parser_tell(p.rawParser(), nil)
+	cint := C.g_mime_parser_tell(p.rawParser())
 	return int64(cint)
 }
 
@@ -58,7 +58,7 @@ func (p *aParser) Eos() bool {
 }
 
 func (p *aParser) SetScanFrom(scanFrom bool) {
-	C.g_mime_parser_get_format(p.rawParser(), gbool(scanFrom))
+	C.g_mime_parser_get_format(p.rawParser())
 }
 
 func (p *aParser) rawParser() *C.GMimeParser {

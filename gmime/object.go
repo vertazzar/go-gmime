@@ -94,7 +94,7 @@ func (o *anObject) Header(name string) (string, bool) {
 }
 
 func (o *anObject) ToString() string {
-	str := C.g_mime_object_to_string(o.rawObject())
+	str := C.g_mime_object_to_string(o.rawObject(), nil)
 	defer C.free(unsafe.Pointer(str))
 	return C.GoString(str)
 }
@@ -108,7 +108,7 @@ func (o *anObject) ContentDisposition() ContentDisposition {
 }
 
 func (o *anObject) Headers() string {
-	headers := C.g_mime_object_get_headers(o.rawObject())
+	headers := C.g_mime_object_get_headers(o.rawObject(), nil)
 	defer C.free(unsafe.Pointer(headers))
 
 	return C.GoString(headers)
